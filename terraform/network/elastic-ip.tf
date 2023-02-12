@@ -6,10 +6,10 @@ resource "aws_eip" "eip-1" {
   }
 }
 
-resource "aws_eip" "eip-2" {
-  vpc = true
+# resource "aws_eip" "eip-2" {
+#   vpc = true
 
-  tags = {
-    Name = "${var.ws_name}-eip-2"
-  }
-}
+#   tags = {
+#     Name = "${var.ws_name}-eip-2"
+#   }
+# }

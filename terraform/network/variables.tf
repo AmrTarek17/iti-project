@@ -27,10 +27,10 @@ variable "pub_sub-1_cidr_block" {
   description = "public subnet 1 CIDR"
 }
 
-variable "pub_sub-2_cidr_block" {
-  type = string
-  description = "public subnet 2 CIDR"
-}
+# variable "pub_sub-2_cidr_block" {
+#   type = string
+#   description = "public subnet 2 CIDR"
+# }
 
 variable "priv_sub-1_cidr_block" {
   type = string

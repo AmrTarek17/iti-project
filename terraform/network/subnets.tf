@@ -11,16 +11,16 @@ resource "aws_subnet" "public-sub-zone-1" {
 }
 
 
-resource "aws_subnet" "public-sub-zone-2" {
-  vpc_id            = aws_vpc.my-vpc.id
-  cidr_block        = var.pub_sub-2_cidr_block
-  # "10.0.2.0/24"
-  availability_zone = "${var.region}b"
+# resource "aws_subnet" "public-sub-zone-2" {
+#   vpc_id            = aws_vpc.my-vpc.id
+#   cidr_block        = var.pub_sub-2_cidr_block
+#   # "10.0.2.0/24"
+#   availability_zone = "${var.region}b"
 
-  tags = {
-    Name = "${var.ws_name}-public-sub-zone-2"
-  }
-}
+#   tags = {
+#     Name = "${var.ws_name}-public-sub-zone-2"
+#   }
+# }
 
 
 # private subnets
