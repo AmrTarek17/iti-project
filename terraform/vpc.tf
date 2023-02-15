@@ -16,6 +16,16 @@ module "vpc" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
+  manage_default_security_group = true
+  default_security_group_name   = "my-default-sg"
+  default_security_group_ingress = [{
+    protocol    = "tcp"
+    self        = true
+    from_port   = 22
+    to_port     = 22
+    cidr_blocks = "0.0.0.0/0"
+  }]
+
   tags = {
     Environment = "staging"
   }
