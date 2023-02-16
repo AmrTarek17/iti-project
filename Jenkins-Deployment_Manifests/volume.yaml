@@ -30,7 +30,7 @@ spec:
             - key: kubernetes.io/hostname
               operator: In
               values:
-                - ip-10-0-27-80.us-west-2.compute.internal
+                - ip-10-0-4-76.us-west-2.compute.internal
 
 ---
 apiVersion: v1

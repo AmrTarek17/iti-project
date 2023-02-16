@@ -19,7 +19,7 @@ spec:
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
-          image: amrtarek6/custome_jenkins:1.0
+          image: jenkins/jenkins:lts
           resources:
             limits:
               memory: "2Gi"
@@ -52,25 +52,11 @@ spec:
             - name: jenkins-data
               mountPath: /var/jenkins_home
 
-            - name: dockersock
-              mountPath: /var/run/docker.sock
-
-            - name: docker
-              mountPath: /usr/bin/docker
-              subPath: docker
-
             - name: kubernetes
               mountPath: /usr/bin/kubectl
               subPath: kubectl
+
       initContainers:
-        - name: init-docker
-          image: docker
-          command: ["cp", "/usr/local/bin/docker", "/opt/tmp"]
-
-          volumeMounts:
-            - name: docker
-              mountPath: /opt/tmp
-
         - name: init-k8s
           image: alpine/k8s:1.23.13
           command: ["cp", "/usr/bin/kubectl", "/opt/temp"]
@@ -82,13 +68,6 @@ spec:
         - name: jenkins-data
           persistentVolumeClaim:
             claimName: jenkins-pv-claim
-
-        - name: docker
-          emptyDir: {}
-
-        - name: dockersock
-          hostPath:
-            path: /var/run/docker.sock
 
         - name: kubernetes
           emptyDir: {}
