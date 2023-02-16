@@ -14,8 +14,8 @@ spec:
         app: jenkins-server
     spec:
       securityContext:
-            fsGroup: 1000 
-            runAsUser: 1000
+        fsGroup: 1000
+        runAsUser: 1000
       serviceAccountName: jenkins-admin
       containers:
         - name: jenkins
@@ -50,8 +50,45 @@ spec:
             failureThreshold: 3
           volumeMounts:
             - name: jenkins-data
-              mountPath: /var/jenkins_home        
+              mountPath: /var/jenkins_home
+
+            - name: dockersock
+              mountPath: /var/run/docker.sock
+
+            - name: docker
+              mountPath: /usr/bin/docker
+              subPath: docker
+
+            - name: kubernetes
+              mountPath: /usr/bin/kubectl
+              subPath: kubectl
+      initContainers:
+        - name: init-docker
+          image: docker
+          command: ["cp", "/usr/local/bin/docker", "/opt/tmp"]
+
+          volumeMounts:
+            - name: docker
+              mountPath: /opt/tmp
+
+        - name: init-k8s
+          image: alpine/k8s:1.23.13
+          command: ["cp", "/usr/bin/kubectl", "/opt/temp"]
+
+          volumeMounts:
+            - name: kubernetes
+              mountPath: "/opt/temp"
       volumes:
         - name: jenkins-data
           persistentVolumeClaim:
-              claimName: jenkins-pv-claim
+            claimName: jenkins-pv-claim
+
+        - name: docker
+          emptyDir: {}
+
+        - name: dockersock
+          hostPath:
+            path: /var/run/docker.sock
+
+        - name: kubernetes
+          emptyDir: {}
