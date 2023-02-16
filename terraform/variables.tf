@@ -48,15 +48,6 @@ variable "ami_id" {
   description = "Image id"
 }
 
-# rds
-# variable "rds_username" {
-#   type = string
-# }
-
-# variable "rds_password" {
-#   type = string
-# }
-
 # EKS
 variable "nodes_desired_size" {
   type = number

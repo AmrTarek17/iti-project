@@ -3,10 +3,9 @@
 
 This project contains:
 *  Infrastructure as code using [Terraform](https://www.terraform.io/) that builds an environment on the AWS cloud platform
-* jenkins custome image Dockerfile
-* [Kubernetes](https://kubernetes.io) YAML files for deploying jenkins
+* [Kubernetes](https://kubernetes.io) Jenkins-Deployment_Manifests YAML files for deploying jenkins
 * Demo app with Dockerfile
-* [Kubernetes](https://kubernetes.io) YAML files for deploying the demo app
+* [Kubernetes](https://kubernetes.io) Using the demo app from [My_Connect-4_repo](https://github.com/AmrTarek17/Connect-4)
 
 ## Tools Used
 
@@ -14,7 +13,7 @@ This project contains:
 * [AWS](https://aws.amazon.com/)
 * [Docker](https://www.docker.com/)
 * [kubernetes](https://kubernetes.io)
-* [python](https://www.python.org)
+* [Jenkins](https://www.jenkins.io/)
 
 
 ## Get Started
@@ -31,7 +30,7 @@ This project contains:
 * Second build the infrastructure by run
 
     ```bash
-    cd iti-project/
+    cd iti-project/terraform
     ```
 
     ``` 
@@ -40,92 +39,54 @@ This project contains:
     ```
     that will build:
     
-    * VPC named "main"
+    * VPC named "prod-vpc"
     * 2 public Subnets
     * 2 private Subnets
-    * 1 nat gateway   
-    * Kubernetes cluster named "my-eks"
+    * 2 nat gateway   
+    * EKS private Kubernetes cluster
+    * 1 ec2 used as bastion and slave for jenkins
+
+
+    ## configure config map on ec2 and add your role 
+
+    ```
+    - groups:
+      - system:masters
+      rolearn: arn:aws:iam::<change all arn with yours>:role/ec2-eks
+      username: basion-admin
+    ```
 
         ```bash
         # NOTE
         You need to get attached to cluster using.
-        aws eks --region <region> update-kubeconfig --name <clusterName> --profile <profileName That Used While Creating Cluster>
+        aws eks --region <region> update-kubeconfig --name <clusterName> 
         ```
-### to Build & Push Docker custome-jenkins-Image to docker hub
-* Build the Docker Image by run
+### deploy jenkins from /Jenkins-Deployment_Manifests using Readme.md there then
 
-    ```bash
-    cd Dockerfiles
+```
+kubect exec -it <jenkins_pod_name> bash
+```
+* cat the admin password file and use it to create your own
+* hit install recomended
+* fork my repo [My_Connect-4_repo](https://github.com/AmrTarek17/Connect-4)
+* edit IMG_NAME variable from Jenkinsfile there
+* configure your docker hub credintials on jenkins with credentialsId: 'Docker_Hub'
+* configure your ec2 ssh credintial with the private key that terraform created for you "You can locate it in secrets manger from console"
+![image](https://user-images.githubusercontent.com/47079437/219493823-c4a459d1-b4e9-4155-862e-d30d6d4a8d08.png)
 
-    docker build -t <dockerHub-UserID>/<image-name>:<image-version> .
-    docker push <dockerHub-UserID>/<image-name>:<image-version>
-    ```
+![image](https://user-images.githubusercontent.com/47079437/219493459-873d6f82-3da7-493f-be1c-745948ff54e9.png) 
+* configure your pipeline
+![image](https://user-images.githubusercontent.com/47079437/219491485-e5fc1562-eccb-49d8-8481-39f2888c5336.png)
 
-
-### deploy jenkins from /Jenkins-Deployment_Manifests using Readme.md there
-
-### configure jenkins with eks
-
-* first install and apply kubernetes plugin
-    ![image](https://user-images.githubusercontent.com/47079437/218911770-192df886-8f49-403a-b4ce-d7a0e72950c3.png)
-* run ```kubectl cluster-info``` for control plan url
-* run ```kubectl describe secret $(kubectl describe serviceaccount jenkins-admin --namespace=devops-tools | grep Token | awk '{print $2}') --namespace=devops-tools``` for token
-* run ```kubectl create rolebinding jenkins-admin-binding --clusterrole=jenkins-admin --serviceaccount=jenkins-admin:jenkins-admin --namespace=devops-tools``` for role binding
-
-### with all of this add cloud kubernetes from manage nodes and clouds
-
-![image](https://user-images.githubusercontent.com/47079437/218913754-62650677-2918-4cd3-9b35-a7e8536d4338.png)
-
-### Build & Push Docker Image to GCR
-* Build the Docker Image by run
-
-    ```bash
-    docker build -t eu.gcr.io/<PROJECT-ID>/my-app:1.0 src/
-    ```
-* pull Redis image and tag it
-    ```bash
-    docker pull redis:5.0
-    docker tag redis:5.0 eu.gcr.io/<PROJECT-ID>/redis:5.0
-    ```
-* Setup credentials for docker to Push to GCR using "docker-gcr-sa" Service Account
-
-    ```
-    gcloud auth activate-service-account docker-gcr-sa --key-file=KEY-FILE
-    gcloud auth configure-docker
-    ```
-* Push the Images to GCR
-
-    ```
-    docker push eu.gcr.io/<PROJECT-ID>/my-app:1.0
-    docker push eu.gcr.io/<PROJECT-ID>/redis:5.0
-    ```
-
-### Deploy
-* After the infrastructure got built, now you can login to the "management-vm" VM using SSH then:
-    
-    * setup cluster credentials
-        ```
-        gcloud container clusters get-credentials app-cluster --zone europe-west1-c --project <PROJECT-ID>
-        ```
-    * Change image in "k8s-yaml-files/deployments/app-deployment.yaml" with your image
-
-    * Change image in "k8s-yaml-files/deployments/redis-pod.yaml" with your image
-
-    * Upload the "k8s-yaml-files" dir to the VM and run
-    
-        ```
-        kubectl apply -f k8s-yaml-files/
-        ```
-
-        that will deploy:
-        
-        * Config Map for environment variables used by demo app
-        * Redis Pod and Exopse the pod with ClusterIP service
-        * Demo App Deployment and Exopse it with NodePort service
-        * Ingress to create HTTP loadbalancer
+* Run your pipeline
+![image](https://user-images.githubusercontent.com/47079437/219494215-fce9ebb2-9c8e-4fad-ba47-67f5ddfb4bc4.png)
 
 ---
 Now, you can access the Demo App by hitting the Ingress IP 
 
-You can try my deployed demo from [here](http://34.160.145.6/)
-And you can brows my Demo ScreenShots folder from GCP-Terraform/ScreenShots
+You can try my deployed demo Game from [here](http://acb4cfa3ebe4d4ae9bd2fe194826c862-a734eb8b1c4c9f8e.elb.us-west-2.amazonaws.com)
+
+You can try my deployed jenkins from [here](http://ad3a734130a6244859985054ce946913-1362118519.us-west-2.elb.amazonaws.com:8080)
+```User:admin```,```Pass:admin```
+
+:tada: :tada: :tada: :tada:
