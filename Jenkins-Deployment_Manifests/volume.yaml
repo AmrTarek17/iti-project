@@ -26,11 +26,11 @@ spec:
   nodeAffinity:
     required:
       nodeSelectorTerms:
-      - matchExpressions:
-        - key: kubernetes.io/hostname
-          operator: In
-          values:
-          - ip-10-0-5-238.us-west-2.compute.internal
+        - matchExpressions:
+            - key: kubernetes.io/hostname
+              operator: In
+              values:
+                - ip-10-0-27-80.us-west-2.compute.internal
 
 ---
 apiVersion: v1
