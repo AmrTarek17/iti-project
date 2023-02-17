@@ -61,7 +61,12 @@ This project contains:
         You need to get attached to cluster using.
         aws eks --region <region> update-kubeconfig --name <clusterName> 
         ```
-### deploy jenkins from /Jenkins-Deployment_Manifests using Readme.md there then
+### deploy jenkins with ansible playbook
+![image](https://user-images.githubusercontent.com/47079437/219532656-3f194073-ff30-4af8-8432-ca879bbdbe88.png)
+
+![image](https://user-images.githubusercontent.com/47079437/219531956-6e147679-2f75-4f66-9fb1-2e75864cd8e7.png)
+
+### or deploy jenkins from /Jenkins-Deployment_Manifests using Readme.md there then
 
 ```
 kubect exec -it <jenkins_pod_name> bash
