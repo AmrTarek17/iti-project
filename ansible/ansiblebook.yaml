@@ -1,0 +1,15 @@
+---
+- name: deploy jenkins
+  hosts: k8s
+  become: true
+  tasks:
+    - name: Copy jenkins files
+      copy:
+        src: "./Jenkins-Deployment_Manifests"
+        dest: "/home/ansadmin"
+
+    - name: configure cluster
+      shell: aws eks --region us-west-2 update-kubeconfig --name prod_eks_cluster
+
+    - name: deploy jenkins
+      shell: kubectl apply -f /home/ansadmin/Jenkins-Deployment_Manifests/
