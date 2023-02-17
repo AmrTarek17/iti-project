@@ -66,6 +66,26 @@ This project contains:
 
 ![image](https://user-images.githubusercontent.com/47079437/219531956-6e147679-2f75-4f66-9fb1-2e75864cd8e7.png)
 
+## ansible code
+
+```
+---
+- name: deploy jenkins
+  hosts: k8s
+  become: true
+  tasks:
+    - name: Copy jenkins files
+      copy:
+        src: "./Jenkins-Deployment_Manifests"
+        dest: "/home/ansadmin"
+
+    - name: configure cluster
+      shell: aws eks --region us-west-2 update-kubeconfig --name prod_eks_cluster
+
+    - name: deploy jenkins
+      shell: kubectl apply -f /home/ansadmin/Jenkins-Deployment_Manifests/
+```
+
 ### or deploy jenkins from /Jenkins-Deployment_Manifests using Readme.md there then
 
 ```
@@ -76,7 +96,9 @@ kubect exec -it <jenkins_pod_name> bash
 * fork my repo [My_Connect-4_repo](https://github.com/AmrTarek17/Connect-4)
 * edit IMG_NAME variable from Jenkinsfile there
 * configure your docker hub credintials on jenkins with credentialsId: 'Docker_Hub'
-* configure your ec2 ssh credintial with the private key that terraform created for you "You can locate it in secrets manger from console"
+* configure your ec2 ssh credintial with the private key that terraform created for you "You can locate it in secrets manger from console" use ```label:ec2-slave```
+![image](https://user-images.githubusercontent.com/47079437/219534253-9a6ed52d-f82f-4b0d-a3ab-b2fe30be69d6.png)
+
 ![image](https://user-images.githubusercontent.com/47079437/219493823-c4a459d1-b4e9-4155-862e-d30d6d4a8d08.png)
 
 ![image](https://user-images.githubusercontent.com/47079437/219493459-873d6f82-3da7-493f-be1c-745948ff54e9.png) 
