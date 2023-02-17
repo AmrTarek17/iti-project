@@ -7,6 +7,12 @@ This project contains:
 * Demo app with Dockerfile
 * [Kubernetes](https://kubernetes.io) Using the demo app from [My_Connect-4_repo](https://github.com/AmrTarek17/Connect-4)
 
+## Task Over view
+
+![image](https://user-images.githubusercontent.com/47079437/219536223-be898372-0ce2-48fe-9bff-b2987e12ba2b.png)
+
+![image](https://user-images.githubusercontent.com/47079437/219535928-ddfeec58-6563-485e-83a8-b1d54d94a775.png)
+
 ## Tools Used
 
 * [Terraform](https://www.terraform.io/)
@@ -97,7 +103,6 @@ kubect exec -it <jenkins_pod_name> bash
 * edit IMG_NAME variable from Jenkinsfile there
 * configure your docker hub credintials on jenkins with credentialsId: 'Docker_Hub'
 * configure your ec2 ssh credintial with the private key that terraform created for you "You can locate it in secrets manger from console" use ```label:ec2-slave```
-![image](https://user-images.githubusercontent.com/47079437/219534253-9a6ed52d-f82f-4b0d-a3ab-b2fe30be69d6.png)
 
 ![image](https://user-images.githubusercontent.com/47079437/219493823-c4a459d1-b4e9-4155-862e-d30d6d4a8d08.png)
 
@@ -108,10 +113,13 @@ kubect exec -it <jenkins_pod_name> bash
 * Run your pipeline
 ![image](https://user-images.githubusercontent.com/47079437/219494215-fce9ebb2-9c8e-4fad-ba47-67f5ddfb4bc4.png)
 
+![image](https://user-images.githubusercontent.com/47079437/219535787-6447ddc8-3f1e-4000-afbe-d99d7e7ff61a.png)
+
 ---
-Now, you can access the Demo App by hitting the Ingress IP 
 
 You can try my deployed demo Game from [here](http://acb4cfa3ebe4d4ae9bd2fe194826c862-a734eb8b1c4c9f8e.elb.us-west-2.amazonaws.com)
+
+connect4 game [Game-repo with Jenkins pipline](https://github.com/AmrTarek17/Connect-4)
 
 You can try my deployed jenkins from [here](http://ad3a734130a6244859985054ce946913-1362118519.us-west-2.elb.amazonaws.com:8080)
 ```User:admin```,```Pass:admin```
